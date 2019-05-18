@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #coding=utf-8
 import io
+import glob  
 import os
 import picamera
 import logging
@@ -21,7 +22,19 @@ PAGE="""\
 </body>
 </html>
 """
-def pathMedia():
+def check_disk_remove(stringPath):
+    now = datetime.datetime.now()
+    lastday = now - datetime.timedelta(days=5)     #5天前
+    try:
+        #$rm /media/pi/BACKUP/video/video051515* 
+        filelist = glob.glob(stringPath +'/video'+ lastday.strftime('%m%d')+'*')
+        for file in filelist:
+            os.remove(file)
+    except Exception as e:
+        logging.warning(e)
+
+    
+def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BACKUP
     #PathMdeia = os.getcwd()+'/upload/'+ year +'_'+ month +'/day'+ day +'/'  #當前目錄+...
     PathMdeia = '/media/pi/BACKUP'
     try:
@@ -29,11 +42,12 @@ def pathMedia():
             #logging.warning('Here is the media')    #USB media + Driver name
             if os.path.isdir(PathMdeia +'/video'):
                 logging.warning('Here have the media&path')    #USB media + Driver name
-                return PathMdeia +'/video'
             else:
                 os.makedirs(PathMdeia +'/video') 
                 logging.warning('Create directory /video')    #USB media + Driver name
-                return PathMdeia +'/video'
+
+            check_disk_remove(PathMdeia +'/video')
+            return PathMdeia +'/video'
         else:
             logging.warning('The media been change to /dev/null')
             return '/dev/null'
@@ -58,8 +72,8 @@ class StreamingOutput(object):
                 #logging.warning(self.nowtime,self.lastime)
                 print(self.nowtime,self.lastime)
                 self.lastime = self.nowtime    
-                #camera.split_recording('video'+ self.nowtime.strftime('%m%d%H%M%S') +'.h264', splitter_port=2)    #另一port
-                camera.split_recording(pathMedia()+'/'+'video'+ self.nowtime.strftime('%m%d%H%M%S') +'.h264', splitter_port=2)    #另一port
+                #camera.split_recording('video'+ self.nowtime.strftime('%m%d%H%M%S') +'.h264', splitter_port=2) #另一port,儲存本地
+                camera.split_recording(pathMedia()+'/'+'video'+ self.nowtime.strftime('%m%d%H%M%S') +'.h264', splitter_port=2) #另一port,儲存USB
         except:
             #logging.warning('Storage have some issue')
             print('Storage have some issue')
@@ -146,8 +160,8 @@ with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
     
     camera.start_recording(output, format='mjpeg')  #default splitter_port=1
 
-    #camera.start_recording('video'+ datetime.datetime.now().strftime('%m%d%H%M%S') +'.h264', format='h264', splitter_port=2, quality=30)    #另一port     
-    camera.start_recording(pathMedia()+'/'+'video'+ datetime.datetime.now().strftime('%m%d%H%M%S') +'.h264', format='h264', splitter_port=2, quality=30)    #另一port
+    #camera.start_recording('video'+ datetime.datetime.now().strftime('%m%d%H%M%S') +'.h264', format='h264', splitter_port=2, quality=30) #另一port,儲存本地     
+    camera.start_recording(pathMedia()+'/'+'video'+ datetime.datetime.now().strftime('%m%d%H%M%S') +'.h264', format='h264', splitter_port=2, quality=30) #另一port,儲存USB
     #camera.start_recording('/dev/null', format='h264', splitter_port=2, quality=30, motion_output=stream)
     #camera.wait_recording(5)
     #logging.warning('Video start recording...')
