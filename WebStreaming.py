@@ -18,10 +18,13 @@ PAGE="""\
 </head>
 <body>
 <h1>PiCamera MJPEG Streaming Demo</h1>
+<p>The UART default setting is 9600,N,8,1</p>
 <img src="stream.mjpg" width="640" height="480" />
 </body>
 </html>
 """
+# <img src=%s width="140" height="80" /> % read(open('chick_medium.jpg','r'))
+
 def check_disk_remove(stringPath):
     now = datetime.datetime.now()
     lastday = now - datetime.timedelta(days=5)     #5天前
@@ -76,7 +79,7 @@ class StreamingOutput(object):
                 camera.split_recording(pathMedia()+'/'+'video'+ self.nowtime.strftime('%m%d%H%M%S') +'.h264', splitter_port=2) #另一port,儲存USB
         except:
             #logging.warning('Storage have some issue')
-            print('Storage have some issue')
+            print('Storage have some issue: %s'% e)
 
         if buf.startswith(b'\xff\xd8'):
             # New frame, copy the existing buffer's content and notify all
@@ -105,6 +108,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Location', '/index.html')
             self.end_headers()
         elif self.path == '/index.html':
+
             content = PAGE.encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
@@ -112,7 +116,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(content)
             #WriteFilePath.write_IMG(content)   #Debug for saving
-        elif self.path == '/stream.mjpg':
+        elif self.path == '/stream.mjpg':       #http://ip:8000/stream.mjpg  資料流同時遠地下載 
             self.send_response(200)
             self.send_header('Age', 0)
             self.send_header('Cache-Control', 'no-cache, private')
