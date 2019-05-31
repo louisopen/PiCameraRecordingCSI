@@ -1,8 +1,9 @@
 ### PiCamera Web Streaming and Recording to staore in files on CSI interface (Python)
-直接使用RaspBian Linux自帶庫(picamera)指令raspstill raspivid來控制攝像頭模組(CSI interface)。也可以直接在Python程序控制Pi Camera視頻, 同時將視頻流以每2~3分鐘儲存成一個視頻檔案或存到外部存儲裝置(USB disk), 這個庫有許多配置，可以改變亮度，對比度，影象效果，曝光模式等...這樣除了有瀏覽遠端攝像頭之外還有非常流行的行車記錄儀功能或公共場所之監控功能.
+直接使用RaspBian Linux自帶庫(picamera)指令raspstill raspivid來控制攝像頭模組(CSI interface)。也可以直接在Python程序控制Pi Camera視頻, 同時將視頻流以每2分鐘(120sec.)儲存成一個視頻檔案或存到外部存儲裝置(USB disk), 這個庫有許多配置，可以改變亮度，對比度，影象效果，曝光模式等...這樣除了有瀏覽遠端攝像頭之外還有非常流行的行車記錄儀功能或公共場所之監控功能.
+
+以目前畫面品質h264儲存檔案約1MB,若降低畫面品質將可以存儲更多資料.
 
 外部存儲裝置USB disk 存放視頻檔案(.h264)循環存放,保留最近5天,可以循環利用存儲空間;
-
 
 * 後續可自行加強增修它的移動偵測功能, 不用持續再持續性錄影, 以節省記憶體體空間;
 
@@ -12,12 +13,15 @@
 
 * 增強輔助功能如燈控, 如雲台控制...;
 
+### picamera控制方法
 https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/8
 
 ### 庫文件
 picamera 庫文件(Raspberry Pi專有)記得安裝
 
 sudo apt-get update
+
+sudo apt-get upgrade
 
 sudo apt-get install python3-picamera  #前一版... python-picamera
 
