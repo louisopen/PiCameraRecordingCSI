@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 #coding=utf-8
+#Python camera program on Raspberry pi Linux
+#滾動式影像資訊儲存(四天)
 import io
 import glob  
 import os
@@ -27,7 +29,7 @@ PAGE="""\
 
 def check_disk_remove(stringPath):
     now = datetime.datetime.now()
-    lastday = now - datetime.timedelta(days=5)     #5天前
+    lastday = now - datetime.timedelta(days=4)     #4天前
     try:
         #$rm /media/pi/BACKUP/video/video051515* 
         filelist = glob.glob(stringPath +'/video'+ lastday.strftime('%m%d')+'*')
@@ -108,7 +110,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Location', '/index.html')
             self.end_headers()
         elif self.path == '/index.html':
-
+            
             content = PAGE.encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
@@ -145,7 +147,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):  #multi task 多線程
     allow_reuse_address = True
     daemon_threads = True
-
+    
 with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
     #camera.led = True  #Camera模組上的紅色LED 關閉
     #camera.exif_tags['Artis'] = 'haha!'
