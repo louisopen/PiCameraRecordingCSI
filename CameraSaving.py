@@ -14,6 +14,10 @@ camera.start_preview()
 #add text on image
 camera.annotate_text = 'Hi Pi User'
 sleep(5)
+
+
 #store image
 camera.capture('image1.jpeg')
+
+
 camera.stop_preview()

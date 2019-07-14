@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #coding=utf-8
 #Python camera program on Raspberry pi Linux
-#滾動式影像資訊儲存(四天)
+#滾動式影像資訊儲存(四天)於USB disk
+
 import io
 import glob  
 import os
