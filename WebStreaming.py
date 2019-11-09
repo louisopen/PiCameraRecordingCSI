@@ -33,13 +33,17 @@ def check_disk_remove(stringPath):
     lastday = now - datetime.timedelta(days=4)     #4天前
     try:
         #$rm /media/pi/BACKUP/video/video051515* 
-        filelist = glob.glob(stringPath +'/video'+ lastday.strftime('%m%d')+'*')
+        #filelist = glob.glob(stringPath +'/video'+ lastday.strftime('%m%d*'))
+        #for file in filelist:
+        #    os.remove(file)
+        filelist = glob.glob(stringPath + '/video*')
         for file in filelist:
-            os.remove(file)
+            if file < str(stringPath + '/video' + lastday.strftime('%m%d*')):
+                #print file
+                os.remove(file)
     except Exception as e:
         logging.warning(e)
 
-    
 def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BACKUP
     #PathMdeia = os.getcwd()+'/upload/'+ year +'_'+ month +'/day'+ day +'/'  #當前目錄+...
     PathMdeia = '/media/pi/BACKUP'
@@ -61,7 +65,7 @@ def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BAC
         logging.warning('been change to /dev/null')
         return '/dev/null'
 
-class StreamingOutput(object):
+class StreamingOutput(object): 
     def __init__(self):
         self.frame = None
         self.buffer = io.BytesIO()

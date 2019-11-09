@@ -1,0 +1,4 @@
+# check ip with hourly
+0 */1 * * * /usr/bin/python3 /home/pi/reportip.py
+#sudo nano /etc/crontab              #add on line in crontab for running at 30 second after reboot 
+#@reboot sleep 30 ; /home/pi/autorun.sh
