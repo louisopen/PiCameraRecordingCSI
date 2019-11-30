@@ -19,6 +19,10 @@
 
 軟件就這一支了WebStreaming.py 創建好心的目錄後複製~$git clone https://github.com/louisopen/PiCameraRecordingCSI
 運行~$python3 ./WebStreaming.py
+
+* #PathMdeia = os.getcwd()     #可以使用當前目錄下/Video...這樣就不用外掛USB Disk(如果你是玩玩)
+* PathMdeia = '/media/pi/BACKUP'    #檔案存放在外掛USB disk目錄下 /BACKUP
+
 ![快照](S__19193858.jpg)
 
 ### PiCamera控制方法
@@ -31,9 +35,9 @@ sudo apt-get update
 
 sudo apt-get upgrade
 
-sudo apt-get install python3-picamera  #前一版... python-picamera
+sudo apt-get install python3-picamera  #前一版才需要,2018以後都不需要了... python-picamera
 
-### Python程序用法：(匯入相關模組)
+### Python程序用法：(匯入相關模組即用法)
 import picamera
 
 from time import sleep

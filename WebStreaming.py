@@ -45,8 +45,10 @@ def check_disk_remove(stringPath):
         logging.warning(e)
 
 def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BACKUP
-    #PathMdeia = os.getcwd()+'/upload/'+ year +'_'+ month +'/day'+ day +'/'  #當前目錄+...
-    PathMdeia = '/media/pi/BACKUP'
+    #now = datetime.datetime.now()
+    #PathMdeia = os.getcwd()+'/upload/'+ now.strftime('%Y%m%d') +'/'  #當前目錄+...
+    #PathMdeia = os.getcwd()     #可以使用當前目錄下/Video...這樣就不用外掛USB Disk(如果你是玩玩)
+    PathMdeia = '/media/pi/BACKUP'      #檔案存放在外掛USB disk目錄下 /BACKUP
     try:
         if os.path.isdir(PathMdeia):       
             #logging.warning('Here is the media')    #USB media + Driver name
