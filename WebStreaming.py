@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #coding=utf-8
-#Python camera program on Raspberry pi Linux
-#滾動式影像資訊儲存(四天)於USB disk
+#Python camera program
+#滾動式影像資訊儲存(五天)於USB disk
 
 import io
 import glob  
@@ -10,7 +10,6 @@ import picamera
 import logging
 import datetime
 import socketserver
-#import WriteFilePath    #my WriteFilePath.py
 from threading import Condition, Thread
 from http import server
 
@@ -26,29 +25,37 @@ PAGE="""\
 </body>
 </html>
 """
+PAGE_help="""\
+<html>
+<head>
+<title>picamera MJPEG streaming help</title>
+</head>
+<body>
+<h1>PiCamera MJPEG Streaming help manual</h1>
+<p>http://ip:8000/</p>
+<p>http://ip:8000/index.html</p>
+<p>http://ip:8000/stream.mjpg</p>
+<p>http://ip:8000/help</p>
+</body>
+</html>
+"""
 # <img src=%s width="140" height="80" /> % read(open('chick_medium.jpg','r'))
 
 def check_disk_remove(stringPath):
     now = datetime.datetime.now()
     lastday = now - datetime.timedelta(days=4)     #4天前
     try:
-        #$rm /media/pi/BACKUP/video/video051515* 
-        #filelist = glob.glob(stringPath +'/video'+ lastday.strftime('%m%d*'))
-        #for file in filelist:
-        #    os.remove(file)
         filelist = glob.glob(stringPath + '/video*')
         for file in filelist:
             if file < str(stringPath + '/video' + lastday.strftime('%m%d*')):
-                #print file
+                #print (file)    #it can work, but OS ....
                 os.remove(file)
     except Exception as e:
         logging.warning(e)
 
 def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BACKUP
-    #now = datetime.datetime.now()
-    #PathMdeia = os.getcwd()+'/upload/'+ now.strftime('%Y%m%d') +'/'  #當前目錄+...
-    #PathMdeia = os.getcwd()     #可以使用當前目錄下/Video...這樣就不用外掛USB Disk(如果你是玩玩)
-    PathMdeia = '/media/pi/BACKUP'      #檔案存放在外掛USB disk目錄下 /BACKUP
+    #PathMdeia = os.getcwd()+'/upload/'+ year +'_'+ month +'/day'+ day +'/'  #當前目錄+...
+    PathMdeia = '/media/pi/BACKUP'
     try:
         if os.path.isdir(PathMdeia):       
             #logging.warning('Here is the media')    #USB media + Driver name
@@ -58,7 +65,7 @@ def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BAC
                 os.makedirs(PathMdeia +'/video') 
                 logging.warning('Create directory /video')    #USB media + Driver name
 
-            check_disk_remove(PathMdeia +'/video')
+            #check_disk_remove(PathMdeia +'/video')
             return PathMdeia +'/video'
         else:
             logging.warning('The media been change to /dev/null')
@@ -114,10 +121,9 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.send_response(301)
-            self.send_header('Location', '/index.html')
+            self.send_header('Location', '/index.html') #轉回/index.html
             self.end_headers()
         elif self.path == '/index.html':
-            
             content = PAGE.encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
@@ -145,6 +151,13 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     self.wfile.write(b'\r\n')
             except Exception as e:
                 logging.warning('Removed streaming client %s: %s',self.client_address, str(e))
+        elif self.path == '/help':       #http://ip:8000/help  
+            content = PAGE_help.encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html')
+            self.send_header('Content-Length', len(content))
+            self.end_headers()
+            self.wfile.write(content)
         else:
             self.send_error(404)
             self.end_headers()
