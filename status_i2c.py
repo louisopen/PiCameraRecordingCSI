@@ -4,8 +4,8 @@
 # sudo apt-get install pillow
 # sudo apt-get install python-imaging 
 # sudo apt-get install python-smbus
-#$python3 status_spi.py
-#$python3 status_i2c.py
+#python status_spi.py
+#python status_i2c.py
 
 #import spidev as SPI
 #import SSD1306
@@ -96,10 +96,7 @@ font = ImageFont.load_default()
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
 # font = ImageFont.truetype('Minecraftia.ttf', 8)
 
-while True:
-    # Draw a black filled box to clear the image.
-    draw.rectangle((0,0,width,height), outline=0, fill=0)
-
+def fill_data_display():
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     cmd = "hostname -I | cut -d\' \' -f1"
     IP = subprocess.check_output(cmd, shell = True )
@@ -110,14 +107,19 @@ while True:
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     Disk = subprocess.check_output(cmd, shell = True )
 
+    # Draw a black filled box to clear the image.
+    draw.rectangle((0,0,width,height), outline=0, fill=0)
     # Write two lines of text.
-
     draw.text((x, top),       "IP: " + str(IP),  font=font, fill=255)
-    draw.text((x, top+8),     str(CPU), font=font, fill=255)
-    draw.text((x, top+16),    str(MemUsage),  font=font, fill=255)
-    draw.text((x, top+25),    str(Disk),  font=font, fill=255)
-
+    draw.text((x, top+16),     str(CPU), font=font, fill=255)
+    draw.text((x, top+28),    str(MemUsage),  font=font, fill=255)
+    draw.text((x, top+40),    str(Disk),  font=font, fill=255)
+    draw.text((x, top+52),    str(__name__),  font=font, fill=255)
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(.1)
+#==========================================================================
+if __name__ == "__main__":
+    while True:
+        fill_data_display()
+        time.sleep(.2)
