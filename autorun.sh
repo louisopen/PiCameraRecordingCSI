@@ -16,7 +16,7 @@ cd $jump_dir
 #tr -d "\r" < autorun.sh > newname.sh    #if you can't cd to .... just do this command. #置入新系統時若發生此訊息
 #tr -d "\r" < autorun.sh > newname.sh    #if you got ...Syntax error: end of file unexpected (expecting "then")
 
-sudo python3 $jump_dir/status_i2c.py &
+sudo python $jump_dir/status_i2c.py &
 #sudo python3 $jump_dir/status_spi.py &
 
 sudo python3 $jump_dir/WebStreaming.py

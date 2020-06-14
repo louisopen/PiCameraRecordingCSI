@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #coding=utf-8
 #Python camera program
-#滾動式影像資訊儲存(五天)於USB disk
+#滾動式影像資訊儲存(4天)於USB disk
 
 import io
 import glob  
@@ -40,7 +40,7 @@ PAGE_help="""\
 </html>
 """
 # <img src=%s width="140" height="80" /> % read(open('chick_medium.jpg','r'))
-
+'''
 def check_disk_remove(stringPath):
     now = datetime.datetime.now()
     lastday = now - datetime.timedelta(days=4)     #4天前
@@ -52,12 +52,16 @@ def check_disk_remove(stringPath):
                 os.remove(file)
     except Exception as e:
         logging.warning(e)
-
+'''
 def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BACKUP
     #PathMdeia = os.getcwd()+'/upload/'+ year +'_'+ month +'/day'+ day +'/'  #當前目錄+...
+    #PathMdeia = os.path.join(os.getcwd(),"upload")
+    #PathMdeia = '/home/pi/Videos'
     PathMdeia = '/media/pi/BACKUP'
+    #PathMdeia = '/media/usb/BACKUP'
     try:
-        if os.path.isdir(PathMdeia):       
+        if os.path.isdir(PathMdeia):     
+        #if os.path.isdir(os.path.join(os.getcwd(),"upload")):  
             #logging.warning('Here is the media')    #USB media + Driver name
             if os.path.isdir(PathMdeia +'/video'):
                 logging.warning('Here have the media&path')    #USB media + Driver name

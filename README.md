@@ -23,7 +23,7 @@
 試驗過程遺留很多垃圾, 就當參考贈品了!
 * #PathMdeia = os.getcwd()          #可以使用當前目錄下/Video...這樣就不用外掛USB Disk(如果你是玩玩)
 or
-* PathMdeia = '/media/pi/BACKUP'    #檔案存放在外掛USB disk目錄下 /BACKUP
+* PathMdeia = '/media/pi/BACKUP'    #檔案存放在外掛USB disk目錄下 /BACKUP (視窗模式自動掛載,終端機模式手動掛載)
 
 #### 刪除過期的視頻資料是這一支deletefile.sh
 複製或自行創建Bash Script程序deletefile.sh
@@ -33,8 +33,8 @@ DELDAY=3        #4 day
 find $PATHNAME -name $FILENAME -type f -mtime +$DELDAY                  #list file for rm.
 find $PATHNAME -name $FILENAME -type f -mtime +$DELDAY -exec rm {} \;   #rm
 
-#### 安排定期運行時機~$crontab -e
-編輯添加如下(每60分鐘運行deletefile.sh):
+#### 安排定期運行刪除時機~$crontab -e
+編輯添加如下(每60分鐘運行deletefile.sh): (只保留4天)
 ...
 */60 * * * * sh /home/pi/deletefile.sh >/home/pi/temp.log       #every 60 minutes running
 ...
@@ -43,10 +43,10 @@ find $PATHNAME -name $FILENAME -type f -mtime +$DELDAY -exec rm {} \;   #rm
 #查詢服務運行歷程~$service cron status
 
 #### 編輯開機時啟用任務~$sudo nano /etc/crontab 
-如果希望在系統啟動後30秒, 自動運行WebStreaming.py
+如果希望在系統啟動後20秒, 自動運行WebStreaming.py (終端機或視窗模式都適用)
 編輯添加如下~$sudo nano /etc/crontab 
 ...
-@reboot sleep 30 ; /home/pi/autorun.sh         #啟動WebStreaming.py
+@reboot pi sleep 20 && sh /home/pi/autorun.sh         #啟動20秒後運行autorun.sh
 ...
 
 ![快照](S__19193858.jpg)
