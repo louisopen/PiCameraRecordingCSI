@@ -1,15 +1,6 @@
-# 編輯開機時任務$sudo nano /etc/crontab     #在系統啟動後30秒,自動運行腳本 
-#@reboot sleep 30 ; /home/pi/autorun.sh
-
-
-# 利用編輯定時任務$crontab -e       #每小時檢查IP是否變更(application)
-0 */1 * * * /usr/bin/python3 /home/pi/reportip.py
-
-
-# 利用編輯定時任務$crontab -e    #加入每小時(60min)檢查刪除檔案的任務:每超過4天以上的紀錄檔video*.h264 
-#*/60 * * * * /bash/sh /home/pi/deletefile.sh >/home/pi/temp.log #every 60 minutes running      #fail! because "/bash"
+# 利用編輯定時任務$sudo nano /etc/crontab   #加入每小時(60min)檢查刪除檔案的任務:每超過4天以上的紀錄檔video*.h264 
+#
 */60 * * * * sh /home/pi/deletefile.sh >/home/pi/temp.log       #every 60 minutes running
-#*/60 * * * * sh /home/pi/deletefile.sh >/dev/null 2>&1          #every 60 minutes running
-#*/5 * * * * root sh /home/pi/deletefile.sh &>/dev/null          #every 5 minutes running       #fail! because "root"
-#*/5 * * * * find /media/pi/BACKUP/video -name "video*.h264" -type f -mtime +1 -exec rm {} \;                   #erery 5min
-#*/5 * * * * find /media/pi/BACKUP/video -name "video*.h264" -type f -mtime +1 -exec rm {} \; > /dev/null 2>&1  #every 5min
+#
+@reboot pi sleep 10 && sh /home/pi/autorun.sh                   #啟動10秒後運行autorun.sh
+#@reboot pi sleep 15 && python3 /home/pi/Reportip.py &           #啟動15秒後運行Reportip.py

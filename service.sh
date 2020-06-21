@@ -10,20 +10,11 @@
 #sudo nano .bashrc   	#最後行添加 sh autorun.sh  同時(近端/遠端)啟動
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
-  printf "My IP address is %s\n" "$_IP"
+  printf "My service.sh IP address is %s\n" "$_IP"
 fi
 
-#su pi
-source_dir=$PWD
-#jump_dir=/home/pi/BCON_X1608
-jump_dir=/home/pi/BCON_X1716
-#jump_dir=/home/pi/BCON_X1719
-#jump_dir=/home/pi/WebServer
-cd $jump_dir
-
-#python ./rpi_webservice.py &
-#python3 /home/pi/WebServer/app.py &
-python ./app.py &
+sudo python  /home/pi/status_i2c.py &
+sudo python3 /home/pi/WebStreaming.py &
 #sleep 1
 cd $source_dir
 exit 0

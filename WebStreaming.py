@@ -56,9 +56,8 @@ def check_disk_remove(stringPath):
 def pathMedia():    #存儲到外部USB裝置, 預先定義好USB Disk label:BACKUP
     #PathMdeia = os.getcwd()+'/upload/'+ year +'_'+ month +'/day'+ day +'/'  #當前目錄+...
     #PathMdeia = os.path.join(os.getcwd(),"upload")
-    #PathMdeia = '/home/pi/Videos'
-    PathMdeia = '/media/pi/BACKUP'
-    #PathMdeia = '/media/usb/BACKUP'
+    PathMdeia = '/home/pi/Videos'
+    #PathMdeia = '/media/pi/BACKUP'
     try:
         if os.path.isdir(PathMdeia):     
         #if os.path.isdir(os.path.join(os.getcwd(),"upload")):  

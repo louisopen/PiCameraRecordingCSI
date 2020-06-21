@@ -21,35 +21,47 @@
 複製~$git clone https://github.com/louisopen/PiCameraRecordingCSI
 運行~$python3 ./WebStreaming.py
 試驗過程遺留很多垃圾, 就當參考贈品了!
-* #PathMdeia = os.getcwd()          #可以使用當前目錄下/Video...這樣就不用外掛USB Disk(如果你是玩玩)
+* #PathMdeia=os.getcwd()            #可以使用當前目錄下/Videos 這樣就不用外掛USB Disk(如果你是玩玩)
 or
-* PathMdeia = '/media/pi/BACKUP'    #檔案存放在外掛USB disk目錄下 /BACKUP (視窗模式自動掛載,終端機模式手動掛載)
+* #PathMdeia='/media/pi/BACKUP'     #檔案存放在外掛USB disk目錄下/BACKUP(視窗模式自動掛載/media/pi/
+* PathMdeia='/home/pi/Videos/video' #檔案存放在用戶目錄下./Videos
 
 #### 刪除過期的視頻資料是這一支deletefile.sh
 複製或自行創建Bash Script程序deletefile.sh
-PATHNAME=/media/pi/BACKUP/video
+#PATHNAME=/media/pi/BACKUP/video     #外掛USB
+PATHNAME=/home/pi/Videos/video
 FILENAME="video*.h264"
 DELDAY=3        #4 day
 find $PATHNAME -name $FILENAME -type f -mtime +$DELDAY                  #list file for rm.
 find $PATHNAME -name $FILENAME -type f -mtime +$DELDAY -exec rm {} \;   #rm
 
-#### 安排定期運行刪除時機~$crontab -e
-編輯添加如下(每60分鐘運行deletefile.sh): (只保留4天)
+#### 開機時啟用任務1~$sudo nano /etc/rc.local 
+如果希望在系統啟動後隨即運行背景服務service.sh (app.py,status_i2c.py)
+編輯添加如下~$sudo nano /etc/rc.local 
 ...
-*/60 * * * * sh /home/pi/deletefile.sh >/home/pi/temp.log       #every 60 minutes running
+sudo sh /home/pi/service.sh
+iptables-restore < /etc/iptables.ipv4.nat
 ...
+
+#### 開機時啟用任務2~$sudo nano /etc/crontab 
+如果希望在系統啟動後10秒, 自動運行WebStreaming.py
+編輯添加如下~$sudo nano /etc/crontab 
+...
+@reboot pi sleep 10 && sh /home/pi/autorun.sh         #啟動10秒後運行autorun.sh
+#@reboot pi sleep 15 && python3 /home/pi/Reportip.py & #啟動15秒後運行Reportip.py檢查現行IP
+...
+
 #退出後記得~$crontab -l 看看是否編輯成功
 #更新服務~$service cron restart  
 #查詢服務運行歷程~$service cron status
 
-#### 編輯開機時啟用任務~$sudo nano /etc/crontab 
-如果希望在系統啟動後20秒, 自動運行WebStreaming.py (終端機或視窗模式都適用)
-編輯添加如下~$sudo nano /etc/crontab 
-...
-@reboot pi sleep 20 && sh /home/pi/autorun.sh         #啟動20秒後運行autorun.sh
-...
+#### 問題1: X windows 點開資料夾閃退
+sudo apt-get update         #
+sudo apt-get dist-upgrade   #可以解決衝突
+
 
 ![快照](S__19193858.jpg)
+
 
 
 #### PiCamera控制方法

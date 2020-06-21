@@ -3,7 +3,8 @@
 #crontab -e
 #*/60 * * * * /bash/sh /home/pi/deletefile.sh    #every 60 minutes running
 
-PATHNAME=/media/pi/BACKUP/video
+#PATHNAME=/media/pi/BACKUP/video        #X windows會自動掛載USB碟/media/pi
+PATHNAME=/home/pi/Videos/video          #CLI mode 使用已為使用者創建好的專用目錄
 FILENAME="video*.h264"
 DELDAY=3        #4 day
 
