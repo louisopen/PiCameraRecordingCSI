@@ -28,10 +28,12 @@ or
 
 #### 刪除過期的視頻資料是這一支deletefile.sh
 複製或自行創建Bash Script程序deletefile.sh
-#PATHNAME=/media/pi/BACKUP/video     #外掛USB
-PATHNAME=/home/pi/Videos/video
+#PATHNAME=/media/pi/BACKUP/video    #外掛USB
+PATHNAME=/home/pi/Videos/video      #User本目錄
+    
 FILENAME="video*.h264"
-DELDAY=3        #4 day
+DELDAY=3        #4 day fully
+DELDAY=1        #2 day fully
 find $PATHNAME -name $FILENAME -type f -mtime +$DELDAY                  #list file for rm.
 find $PATHNAME -name $FILENAME -type f -mtime +$DELDAY -exec rm {} \;   #rm
 
@@ -73,6 +75,8 @@ picamera 庫文件(Raspberry Pi專有)記得安裝
 sudo apt-get update
 
 sudo apt-get upgrade
+
+sudo apt-get dist-upgrade
 
 sudo apt-get install python3-picamera  #前一版才需要,2018以後都不需要了... python-picamera
 

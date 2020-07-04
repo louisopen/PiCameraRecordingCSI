@@ -6,7 +6,8 @@
 #PATHNAME=/media/pi/BACKUP/video        #X windows會自動掛載USB碟/media/pi
 PATHNAME=/home/pi/Videos/video          #CLI mode 使用已為使用者創建好的專用目錄
 FILENAME="video*.h264"
-DELDAY=3        #4 day
+DELDAY=3        #4 day fully
+DELDAY=1        #2 day fully
 
 #find directory
 #-mtime +4
